@@ -4,9 +4,9 @@ class Merchant < ApplicationRecord
   validates :reference, presence: true, uniqueness: true
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :disbursement_frequency, presence: true
-  validates :minimum_monthly_fee, 
+  validates :minimum_monthly_fee,
             presence: true,
-            numericality: { greater_than_or_equal_to: 0 }  
+            numericality: { greater_than_or_equal_to: 0 }
 
   before_validation :normalize_reference
 
@@ -16,5 +16,5 @@ class Merchant < ApplicationRecord
 
   def normalize_reference
     self.reference = reference.downcase.gsub(/[' ]/, "'" => "_", " " => "_", "-" => "_")
-  end            
+  end
 end
