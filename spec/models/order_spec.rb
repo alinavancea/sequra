@@ -4,7 +4,8 @@ RSpec.describe Order, type: :model do
   let(:merchant) { Merchant.create(
         reference: 'REF001',
         email: 'test@example.com',
-        minimum_monthly_fee: 10.0
+        minimum_monthly_fee: 10.0,
+        live_on: "2026-02-01"
       )
   }
 

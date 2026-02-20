@@ -10,7 +10,8 @@ RSpec.describe Merchant, type: :model do
       merchant = Merchant.create!(
         reference: 'REF001',
         email: 'test@example.com',
-        minimum_monthly_fee: 10.0
+        minimum_monthly_fee: 10.0,
+        live_on: "2026-02-01"
       )
 
       expect(merchant.daily?).to be true
@@ -22,7 +23,8 @@ RSpec.describe Merchant, type: :model do
         reference: 'REF001',
         email: 'test@example.com',
         disbursement_frequency: :weekly,
-        minimum_monthly_fee: 10.0
+        minimum_monthly_fee: 10.0,
+        live_on: "2026-02-01"
       )
 
       expect(merchant.daily?).to be false
@@ -33,21 +35,37 @@ RSpec.describe Merchant, type: :model do
       expect { Merchant.create!(
         reference: 'REF001',
         email: 'test@example.com',
-        disbursement_frequency: :weeklyy,
-        minimum_monthly_fee: 10.0
+        disbursement_frequency: "Other",
+        minimum_monthly_fee: 10.0,
+        live_on: "2026-02-01"
       ) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Disbursement frequency is not included in the list")
     end
   end
 
   describe "reference" do
-    it "should normalize" do
-      merchant = Merchant.create!(
-        reference: 'Test Shop',
-        email: 'test@example.com',
-        minimum_monthly_fee: 10.0
-      )
+    describe "normalize" do
+      context "when having a value" do
+        it "should normalize" do
+          merchant = Merchant.create!(
+            reference: 'Test Shop',
+            email: 'test@example.com',
+            minimum_monthly_fee: 10.0,
+            live_on: "2026-02-01"
+          )
 
-      expect(merchant.reference).to eq("test_shop")
+          expect(merchant.reference).to eq("test_shop")
+        end
+      end
+
+      context "when nil" do
+        it "should raise error" do
+          expect { Merchant.create!(
+            reference: nil,
+            email: 'test@example.com',
+            minimum_monthly_fee: 10.0
+          )}.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Reference can't be blank, Live on can't be blank")
+        end
+      end
     end
   end
 end
