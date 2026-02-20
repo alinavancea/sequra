@@ -16,3 +16,4 @@ class Merchant < ApplicationRecord
     self.reference = reference.downcase.gsub(/[' ]/, "'" => "_", " " => "_", "-" => "_")
   end            
 end
+

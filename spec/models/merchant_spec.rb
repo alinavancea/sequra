@@ -27,7 +27,7 @@ RSpec.describe Merchant, type: :model do
 
       expect(merchant.daily?).to be false
       expect(merchant.weekly?).to be true
-    end 
+    end
     
     it "fails when using a differnt value" do
       expect { Merchant.create!(
