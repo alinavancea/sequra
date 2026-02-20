@@ -10,10 +10,11 @@ class Merchant < ApplicationRecord
 
   before_validation :normalize_reference
 
+  has_many :orders
+
   private
 
   def normalize_reference
     self.reference = reference.downcase.gsub(/[' ]/, "'" => "_", " " => "_", "-" => "_")
   end            
 end
-

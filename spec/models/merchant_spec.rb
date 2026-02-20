@@ -28,7 +28,7 @@ RSpec.describe Merchant, type: :model do
       expect(merchant.daily?).to be false
       expect(merchant.weekly?).to be true
     end
-    
+
     it "fails when using a differnt value" do
       expect { Merchant.create!(
         reference: 'REF001',
@@ -44,7 +44,7 @@ RSpec.describe Merchant, type: :model do
       merchant = Merchant.create!(
         reference: 'Test Shop',
         email: 'test@example.com',
-        minimum_monthly_fee: 10.0        
+        minimum_monthly_fee: 10.0
       )
 
       expect(merchant.reference).to eq("test_shop")
