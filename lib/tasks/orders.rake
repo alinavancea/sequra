@@ -5,6 +5,7 @@ namespace :orders do
     # TODO
     # Think about loading the file directly to table, current approach can take long time and is not efficient
     # Consider adding to a file orders that could not be created
+    # Consider a prcessed_at column to store the created_at
     CSV.foreach(file, headers: true, col_sep: ";") do |row|
       merchant = merchants.find { |m| m.reference == row["merchant_reference"] }
 
@@ -23,6 +24,7 @@ namespace :orders do
     # Handle minimum_monthly_fee
     # Handle the frequency
     # Move the business logic into a module
+    # Should we process the orders grouped by merchant and processed_at date? In that case we would have a processed at date to
     Merchant.all.each do |merchant|
       pending_orders = merchant.orders.pending
 
