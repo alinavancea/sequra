@@ -31,9 +31,9 @@ namespace :orders do
       if pending_orders.any?
         total_amount = pending_orders.sum(:amount)
 
-        sequora_commission_fee = Sequra::FeeCalculator.for_ammount(total_amount)
-        sequora_commission = Sequra::FeeCalculator.comssion_for_ammount(total_amount, sequora_commission_fee).round(2)
-        merchant_ammount_after_fee = Sequra::FeeCalculator.merchant_ammount_after_fee(total_amount, sequora_commission_fee).round(2)
+        sequora_commission_fee = Sequra::FeeCalculator.for_amount(total_amount)
+        sequora_commission = Sequra::FeeCalculator.comssion_for_amount(total_amount, sequora_commission_fee).round(2)
+        merchant_ammount_after_fee = Sequra::FeeCalculator.merchant_amount_after_fee(total_amount, sequora_commission_fee).round(2)
 
         begin
           disbursement = Disbursement.create!(
