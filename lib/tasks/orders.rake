@@ -49,4 +49,14 @@ namespace :orders do
       end
     end
   end
+
+  task report: :environment do
+    yearly_report = Disrembursment
+      .group("DATE_PART('year', disrembursments.created_at::date)")
+      .select("DATE_PART('year', disrembursments.created_at::date) AS year, COUNT(id) as num, SUM(sequora_commission) as sequora_commission, SUM(merchant_amount) AS merchant_amount ")
+
+    yearly_report.each do |row|
+      p [ row.year, row.num, row.sequora_commission.to_f, row.merchant_amount.to_f ]
+    end
+  end
 end
