@@ -14,6 +14,9 @@ class Disrembursment < ApplicationRecord
     { fee: 0.0085, interval: 300 }
   ]
 
+  # TODO:
+  # Use the constant here
+  # Move this business logic into a module
   def self.sequra_fee_for_ammount(amount)
     case amount
     when amount.in?(0..50)

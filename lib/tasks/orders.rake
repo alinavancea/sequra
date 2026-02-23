@@ -19,7 +19,10 @@ namespace :orders do
   end
 
   task disburse: :environment do
-    # TODO: Move the business logic into a module
+    # TODO:
+    # Handle minimum_monthly_fee
+    # Handle the frequency
+    # Move the business logic into a module
     Merchant.all.each do |merchant|
       pending_orders = merchant.orders.pending
 
