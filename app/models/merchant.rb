@@ -9,7 +9,7 @@ class Merchant < ApplicationRecord
             presence: true,
             numericality: { greater_than_or_equal_to: 0 }
 
-  before_validation :normalize_reference, :normalize_disbursement_frequency
+  before_validation :normalize_reference, :normalize_disbursement_frequency, on: [ :create ]
 
   has_many :orders
 
