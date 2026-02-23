@@ -11,7 +11,7 @@ namespace :orders do
 
       Order.find_or_create_by!(external_id: row["id"]) do |order|
         order.amount = row["amount"]
-        order.created_at = row["created_at"]
+        order.order_date = row["created_at"]
         order.merchant = merchant
       rescue => error
         p error

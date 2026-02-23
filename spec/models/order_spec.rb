@@ -38,4 +38,12 @@ RSpec.describe Order, type: :model do
         }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Merchant must exist")
     end
   end
+
+  describe "order_date" do
+    it "has the same date as created_at if not set" do
+      order = Order.create!(merchant: merchant, external_id: "516c2b28eceb")
+
+      expect(order.order_date).to eq(order.created_at.to_date)
+    end
+  end
 end

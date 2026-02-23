@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_23_075003) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_23_105718) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,6 +43,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_23_075003) do
     t.uuid "disrembursment_id"
     t.string "external_id", null: false
     t.uuid "merchant_id", null: false
+    t.date "order_date", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["disrembursment_id"], name: "index_orders_on_disrembursment_id"
