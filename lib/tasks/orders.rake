@@ -2,7 +2,9 @@ namespace :orders do
   task :import, [ :file_path ] => [ :environment ] do |t, args|
     file = args[:file_path]
     merchants = Merchant.all
-
+    # TODO
+    # Think about loading the file directly to table, current approach can take long time and is not efficient
+    # Consider adding to a file orders that could not be created
     CSV.foreach(file, headers: true, col_sep: ";") do |row|
       merchant = merchants.find { |m| m.reference == row["merchant_reference"] }
 
@@ -12,6 +14,38 @@ namespace :orders do
         order.merchant = merchant
       rescue => error
         p error
+      end
+    end
+  end
+
+  task disburse: :environment do
+    # TODO: Move the business logic into a module
+    Merchant.all.each do |merchant|
+      pending_orders = merchant.orders.pending
+
+      if pending_orders.any?
+        total_amount = pending_orders.sum(:amount)
+
+        sequora_commission_fee = Disrembursment.sequra_fee_for_ammount(total_amount)
+        sequora_commission = Disrembursment.sequra_comssion_for_ammount(total_amount, sequora_commission_fee).round(2)
+        merchant_ammount_after_fee = Disrembursment.merchant_ammount_after_fee(total_amount, sequora_commission_fee).round(2)
+
+        begin
+          disrembursment = Disrembursment.create!(
+            merchant_id: merchant.id,
+            total_amount: total_amount,
+            sequora_commission_fee: sequora_commission_fee,
+            sequora_commission: sequora_commission,
+            merchant_amount: merchant_ammount_after_fee,
+            status: :paid
+            )
+
+          pending_orders.update_all(disrembursment_id: disrembursment.id, status: :processed)
+        rescue => e
+          p e
+        end
+      else
+        p "No orders"
       end
     end
   end

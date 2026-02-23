@@ -10,9 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_20_120818) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_23_075003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "disrembursments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.decimal "merchant_amount", precision: 12, scale: 2, default: "0.0"
+    t.uuid "merchant_id", null: false
+    t.string "reference"
+    t.decimal "sequora_commission", precision: 12, scale: 2, default: "0.0"
+    t.decimal "sequora_commission_fee", precision: 10, scale: 4, default: "0.0"
+    t.integer "status", default: 0, null: false
+    t.decimal "total_amount", precision: 10, scale: 2, default: "0.0"
+    t.datetime "updated_at", null: false
+    t.index ["merchant_id"], name: "index_disrembursments_on_merchant_id"
+  end
 
   create_table "merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -27,12 +40,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_20_120818) do
   create_table "orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.decimal "amount", precision: 10, scale: 2
     t.datetime "created_at", null: false
+    t.uuid "disrembursment_id"
     t.string "external_id", null: false
     t.uuid "merchant_id", null: false
     t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
+    t.index ["disrembursment_id"], name: "index_orders_on_disrembursment_id"
     t.index ["merchant_id"], name: "index_orders_on_merchant_id"
   end
 
+  add_foreign_key "disrembursments", "merchants"
+  add_foreign_key "orders", "disrembursments"
   add_foreign_key "orders", "merchants"
 end
