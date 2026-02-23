@@ -31,12 +31,12 @@ namespace :orders do
       if pending_orders.any?
         total_amount = pending_orders.sum(:amount)
 
-        sequora_commission_fee = Disrembursment.sequra_fee_for_ammount(total_amount)
-        sequora_commission = Disrembursment.sequra_comssion_for_ammount(total_amount, sequora_commission_fee).round(2)
-        merchant_ammount_after_fee = Disrembursment.merchant_ammount_after_fee(total_amount, sequora_commission_fee).round(2)
+        sequora_commission_fee = Sequra::FeeCalculator.for_ammount(total_amount)
+        sequora_commission = Sequra::FeeCalculator.comssion_for_ammount(total_amount, sequora_commission_fee).round(2)
+        merchant_ammount_after_fee = Sequra::FeeCalculator.merchant_ammount_after_fee(total_amount, sequora_commission_fee).round(2)
 
         begin
-          disrembursment = Disrembursment.create!(
+          disbursement = Disbursement.create!(
             merchant_id: merchant.id,
             total_amount: total_amount,
             sequora_commission_fee: sequora_commission_fee,
@@ -45,7 +45,7 @@ namespace :orders do
             status: :paid
             )
 
-          pending_orders.update_all(disrembursment_id: disrembursment.id, status: :processed)
+          pending_orders.update_all(disbursement_id: disbursement.id, status: :processed)
         rescue => e
           p e
         end
@@ -55,11 +55,11 @@ namespace :orders do
     end
   end
 
-  task report_disrembursment_created_at: :environment do
+  task report_disbursement_created_at: :environment do
     desc "Yearly report for disrembursments"
-    yearly_report = Disrembursment.paid
-      .group("DATE_PART('year', disrembursments.created_at::date)")
-      .select("DATE_PART('year', disrembursments.created_at::date) AS year, COUNT(id) as num, SUM(sequora_commission) as sequora_commission, SUM(merchant_amount) AS merchant_amount ")
+    yearly_report = Disbursement.paid
+      .group("DATE_PART('year', disbursements.created_at::date)")
+      .select("DATE_PART('year', disbursements.created_at::date) AS year, COUNT(id) as num, SUM(sequora_commission) as sequora_commission, SUM(merchant_amount) AS merchant_amount ")
 
     yearly_report.each do |row|
       p [ row.year, row.num, row.sequora_commission.to_f, row.merchant_amount.to_f ]
@@ -68,9 +68,9 @@ namespace :orders do
 
   task report_order_date: :environment do
     desc "Yearly report for orders created"
-    yearly_report = Order.processed.joins(:disrembursment)
-      .group("DATE_PART('year', orders.date)")
-      .select("DATE_PART('year', orders.date) AS year, COUNT(disrembursment.id) as num, SUM(disrembursment.sequora_commission) as sequora_commission, SUM(disrembursment.merchant_amount) AS merchant_amount ")
+    yearly_report = Order.processed.joins(:disbursement)
+      .group("DATE_PART('year', orders.order_date)")
+      .select("DATE_PART('year', orders.order_date) AS year, COUNT(disbursements.id) as num, SUM(disbursements.sequora_commission) as sequora_commission, SUM(disbursements.merchant_amount) AS merchant_amount ")
 
     yearly_report.each do |row|
       p [ row.year, row.num, row.sequora_commission.to_f, row.merchant_amount.to_f ]
