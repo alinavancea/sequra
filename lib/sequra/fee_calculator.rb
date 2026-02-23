@@ -1,14 +1,10 @@
 module Sequra
   class FeeCalculator
-    SEQURA_COMISSION_FEE = [
-      { fee: 0.01, interval: (0...50) },
-      { fee: 0.0095, interval: (50...300) },
-      { fee: 0.0085, interval: (300...) }
-    ]
-
     # TODO:
-    # Use the constant here
+    # Use a constant
     def self.for_amount(amount)
+      return 0 if amount.nil? || amount == 0
+
       case amount
       when (0...50)
         0.01
@@ -21,12 +17,16 @@ module Sequra
       end
     end
 
-    def self.comssion_for_amount(amount, fee)
-      amount * fee
+    def self.comssion_for_amount(amount)
+      return 0 if amount.nil? || amount <= 0
+
+      (amount * for_amount(amount)).round(2)
     end
 
-    def self.merchant_amount_after_fee(amount, fee)
-      amount * (1 - fee)
+    def self.merchant_amount_after_fee(amount)
+      return 0 if amount.nil? || amount <= 0
+
+      (amount * (1 - for_amount(amount))).round(2)
     end
   end
 end
