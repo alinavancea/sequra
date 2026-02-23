@@ -1,6 +1,6 @@
-class CreateDisrembursments < ActiveRecord::Migration[8.1]
+class CreateDisbursements < ActiveRecord::Migration[8.1]
   def change
-    create_table :disrembursments, id: :uuid do |t|
+    create_table :disbursements, id: :uuid do |t|
       t.references :merchant, null: false, foreign_key: true, type: :uuid
       t.string :reference
       t.integer :status, default: 0, null: false

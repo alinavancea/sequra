@@ -55,10 +55,22 @@ namespace :orders do
     end
   end
 
-  task report: :environment do
-    yearly_report = Disrembursment
+  task report_disrembursment_created_at: :environment do
+    desc "Yearly report for disrembursments"
+    yearly_report = Disrembursment.paid
       .group("DATE_PART('year', disrembursments.created_at::date)")
       .select("DATE_PART('year', disrembursments.created_at::date) AS year, COUNT(id) as num, SUM(sequora_commission) as sequora_commission, SUM(merchant_amount) AS merchant_amount ")
+
+    yearly_report.each do |row|
+      p [ row.year, row.num, row.sequora_commission.to_f, row.merchant_amount.to_f ]
+    end
+  end
+
+  task report_order_date: :environment do
+    desc "Yearly report for orders created"
+    yearly_report = Order.processed.joins(:disrembursment)
+      .group("DATE_PART('year', orders.date)")
+      .select("DATE_PART('year', orders.date) AS year, COUNT(disrembursment.id) as num, SUM(disrembursment.sequora_commission) as sequora_commission, SUM(disrembursment.merchant_amount) AS merchant_amount ")
 
     yearly_report.each do |row|
       p [ row.year, row.num, row.sequora_commission.to_f, row.merchant_amount.to_f ]

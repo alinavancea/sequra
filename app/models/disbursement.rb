@@ -1,4 +1,4 @@
-class Disrembursment < ApplicationRecord
+class Disbursement < ApplicationRecord
   enum :status, { pending: 0, paid: 1, failed: 2 }, validate: true
 
   validates :reference, presence: true, uniqueness: true

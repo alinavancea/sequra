@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe Disrembursment, type: :model do
+RSpec.describe Disbursement, type: :model do
   describe "status" do
     it "has pending, paid, failed" do
-      expect(Disrembursment.statuses).to eq({ "pending" => 0, "paid" => 1, "failed" => 2 })
+      expect(Disbursement.statuses).to eq({ "pending" => 0, "paid" => 1, "failed" => 2 })
     end
   end
 
@@ -18,7 +18,7 @@ RSpec.describe Disrembursment, type: :model do
     let(:orders) { Order.create(merchant: merchant, external_id: "516c2b28eceb", amount: 100) }
 
     it "sets the reference" do
-      disrembursment = Disrembursment.create!(merchant: merchant)
+      disrembursment = Disbursement.create!(merchant: merchant)
 
       expect(disrembursment.reference).to eq("#{disrembursment.created_at.to_date}_#{disrembursment.merchant.id}")
     end

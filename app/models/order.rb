@@ -3,4 +3,5 @@ class Order < ApplicationRecord
 
   validates :external_id, presence: true
   belongs_to :merchant
+  belongs_to :disbursement, optional: true
 end
