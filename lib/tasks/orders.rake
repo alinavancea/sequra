@@ -10,6 +10,8 @@ namespace :orders do
         order.amount = row["amount"]
         order.created_at = row["created_at"]
         order.merchant = merchant
+      rescue => error
+        p error
       end
     end
   end

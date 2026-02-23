@@ -15,26 +15,26 @@ RSpec.describe Order, type: :model do
     end
 
     it "creates a record with pending as default" do
-      order = Order.create!(merchant: merchant)
+      order = Order.create!(merchant: merchant, external_id: "516c2b28eceb")
 
       expect(order.pending?).to be true
     end
 
     it "creates a record with pending as default" do
-      order = Order.create!(merchant: merchant, status: :processed)
+      order = Order.create!(merchant: merchant, external_id: "516c2b28eceb", status: :processed)
 
       expect(order.processed?).to be true
     end
 
     it "fails when using a differnt value" do
-      expect { Order.create!(merchant: merchant, status: :other)
+      expect { Order.create!(merchant: merchant, external_id: "516c2b28eceb", status: :other)
         }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Status is not included in the list")
     end
   end
 
   describe "merchant" do
     it "fails with no merchant assigned" do
-      expect { Order.create!(status: :pending)
+      expect { Order.create!(status: :pending, external_id: "516c2b28eceb")
         }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Merchant must exist")
     end
   end
