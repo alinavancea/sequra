@@ -40,6 +40,21 @@ RSpec.describe Merchant, type: :model do
         live_on: "2026-02-01"
       ) }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Disbursement frequency is not included in the list")
     end
+
+    describe "normalize" do
+      it "should normalize" do
+        merchant = Merchant.create!(
+          reference: 'REF001',
+          email: 'test@example.com',
+          disbursement_frequency: "Weekly",
+          minimum_monthly_fee: 10.0,
+          live_on: "2026-02-01"
+        )
+
+        expect(merchant.daily?).to be false
+        expect(merchant.weekly?).to be true
+      end
+    end
   end
 
   describe "reference" do

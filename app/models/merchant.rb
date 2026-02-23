@@ -9,7 +9,7 @@ class Merchant < ApplicationRecord
             presence: true,
             numericality: { greater_than_or_equal_to: 0 }
 
-  before_validation :normalize_reference
+  before_validation :normalize_reference, :normalize_disbursement_frequency
 
   has_many :orders
 
@@ -17,5 +17,9 @@ class Merchant < ApplicationRecord
 
   def normalize_reference
     self.reference = reference&.downcase&.gsub(/[' ]/, "'" => "_", " " => "_", "-" => "_")
+  end
+
+  def normalize_disbursement_frequency
+    self.disbursement_frequency = disbursement_frequency.downcase
   end
 end
