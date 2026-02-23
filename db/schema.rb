@@ -24,13 +24,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_20_120818) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "orders", force: :cascade do |t|
+  create_table "orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.decimal "amount", precision: 10, scale: 2
     t.datetime "created_at", null: false
+    t.string "external_id", null: false
     t.uuid "merchant_id", null: false
     t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
-    t.string "uuid"
     t.index ["merchant_id"], name: "index_orders_on_merchant_id"
   end
 
