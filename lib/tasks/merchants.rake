@@ -1,17 +1,14 @@
 namespace :merchants do
   task :import, [ :file_path ] => [ :environment ] do |t, args|
-    file = args[:file_path]
-
-    CSV.foreach(file, headers: true, col_sep: ";") do |row|
-      Merchant.find_or_create_by!(reference: row["reference"]) do |merchant|
-        merchant.id = row["id"]
-        merchant.email = row["email"]
-        merchant.live_on = row["live_on"]
-        merchant.disbursement_frequency = row["disbursement_frequency"]
-        merchant.minimum_monthly_fee = row["minimum_monthly_fee"].to_f
-      rescue => error
-        p error
+    file_path = args[:file_path]
+    if file_path.present?
+      if File.exist?(file_path)
+        Sequra::Import::Merchants.new(file_path).import
+      else
+        raise "File #{file_path} doesn't exist"
       end
+    else
+      raise "Needs file_path"
     end
   end
 end
