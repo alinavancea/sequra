@@ -1,6 +1,6 @@
 module Sequra
   module Reports
-    class MimimumMonthlyFeesReport
+    class MinimumMonthlyFeesReport
       def generate
         # Consider status processed here
         MerchantMinimumMonthlyCommission

@@ -6,7 +6,7 @@ module Sequra
                                   .generate_by_created_at
                                   .index_by(&:year)
 
-        minimum_fees_by_year  = MimimumMonthlyFeesReport.new
+        minimum_fees_by_year  = MinimumMonthlyFeesReport.new
                                   .generate
                                   .index_by(&:year)
 

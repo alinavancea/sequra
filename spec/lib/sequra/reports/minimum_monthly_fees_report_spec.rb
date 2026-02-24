@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe Sequra::Reports::MimimumMonthlyFeesReport do
+RSpec.describe Sequra::Reports::MinimumMonthlyFeesReport do
   let(:merchant1) { Merchant.create(reference: "merchant1", email: "merchant1@test.com", live_on: "2022-01-01") }
   let(:merchant2) { Merchant.create(reference: "merchant2", email: "merchant2@test.com", live_on: "2022-01-01") }
 
-  let(:report) { Sequra::Reports::MimimumMonthlyFeesReport.new.generate }
+  let(:report) { Sequra::Reports::MinimumMonthlyFeesReport.new.generate }
 
   before do
     MerchantMinimumMonthlyCommission.create(
