@@ -32,7 +32,7 @@ module Sequra
 
             disbursement
           rescue => error
-            raise error
+            Rails.logger.error(error.message)
           end
         else
           Rails.logger.info("No orders")
