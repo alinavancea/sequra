@@ -1,4 +1,4 @@
-namespace :disbursement do
+namespace :minimum_monthly_fee do
   task calculate_and_store: :environment do
     desc "Calculates and stores the minimum monthly fees"
     # Every first day of the month

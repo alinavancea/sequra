@@ -1,10 +1,10 @@
 namespace :orders do
   task :import, [ :file_path ] => [ :environment ] do |t, args|
-    file = args[:file_path]
+    file_path = args[:file_path]
 
     if file_path.present?
       if File.exist?(file_path)
-        Sequra::Import::Orders.new(file).import
+        Sequra::Import::Orders.new(file_path).import
       else
         raise "File #{file_path} doesn't exist"
       end
