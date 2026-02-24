@@ -12,6 +12,8 @@ class Merchant < ApplicationRecord
   before_validation :normalize_reference, :normalize_disbursement_frequency, on: [ :create ]
 
   has_many :orders
+  has_many :disbursements
+  has_many :merchant_minimum_monthly_commissions
 
   private
 

@@ -16,4 +16,14 @@ namespace :disbursement do
       p [ row.year, row.disbursements_count, row.sequra_commission.to_f, row.merchant_amount.to_f ]
     end
   end
+
+  task merchant_minimum_monthly_fee: :environment do
+    # Every first day of the month
+
+    first_day_of_last_month = Time.now.utc.beginning_of_month.last_month
+    last_day_of_last_month = first_day_of_last_month.at_end_of_month
+    last_month_interval = first_day_of_last_month .. last_day_of_last_month
+
+    Sequra::Services::MinimumMonthlyFees.new.calculate(last_month_interval)
+  end
 end
