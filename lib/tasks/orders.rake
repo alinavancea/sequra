@@ -13,7 +13,10 @@ namespace :orders do
     end
   end
 
-  task disburse: :environment do
-    Sequra::Services::Disburse.run
+  task :disburse, [ :disbursement_frequence ] => [ :environment ] do |t, args|
+    frequence = args[:disbursement_frequence]
+
+    raise "Invalid frequence, should be daily or weekly" unless frequence.in?([ "daily", "weekly" ])
+    Sequra::Services::Disburse.new(frequence).run
   end
 end
