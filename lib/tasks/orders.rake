@@ -1,21 +1,15 @@
 namespace :orders do
   task :import, [ :file_path ] => [ :environment ] do |t, args|
     file = args[:file_path]
-    merchants = Merchant.all
-    # TODO
-    # Think about loading the file directly to table, current approach can take long time and is not efficient
-    # Consider adding to a file orders that could not be created
-    # Consider a prcessed_at column to store the created_at
-    CSV.foreach(file, headers: true, col_sep: ";") do |row|
-      merchant = merchants.find { |m| m.reference == row["merchant_reference"] }
 
-      Order.find_or_create_by!(external_id: row["id"]) do |order|
-        order.amount = row["amount"]
-        order.order_date = row["created_at"]
-        order.merchant = merchant
-      rescue => error
-        p error
+    if file_path.present?
+      if File.exist?(file_path)
+        Sequra::Import::Orders.new(file).import
+      else
+        raise "File #{file_path} doesn't exist"
       end
+    else
+      raise "Needs file_path"
     end
   end
 
@@ -32,8 +26,8 @@ namespace :orders do
         total_amount = pending_orders.sum(:amount)
 
         sequora_commission_fee = Sequra::FeeCalculator.for_amount(total_amount)
-        sequora_commission = Sequra::FeeCalculator.comssion_for_amount(total_amount, sequora_commission_fee).round(2)
-        merchant_ammount_after_fee = Sequra::FeeCalculator.merchant_amount_after_fee(total_amount, sequora_commission_fee).round(2)
+        sequora_commission = Sequra::FeeCalculator.comssion_for_amount(total_amount)
+        merchant_ammount_after_fee = Sequra::FeeCalculator.merchant_amount_after_fee(total_amount)
 
         begin
           disbursement = Disbursement.create!(
