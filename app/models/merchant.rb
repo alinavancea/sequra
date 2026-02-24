@@ -15,6 +15,7 @@ class Merchant < ApplicationRecord
   has_many :disbursements
   has_many :merchant_minimum_monthly_commissions
 
+  # TODO: test this
   def should_disburse?
     # has any pending orders
     # has no disbursements
