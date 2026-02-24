@@ -1,6 +1,7 @@
 module Sequra
   module Services
     class MinimumMonthlyFees
+      # This method could use some care, should be split maybe per merchant
       def calculate(time_interval)
         merchants = Merchant.all
 
@@ -12,6 +13,7 @@ module Sequra
             merchant.merchant_minimum_monthly_commissions.create!(minimum_monthly_comission: commission_to_pay, commission_date: time_interval.first)
           end
         rescue => error
+          # We could adjust status here to failed
           Rails.logger.error(error.message)
         end
       end

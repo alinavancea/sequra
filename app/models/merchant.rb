@@ -52,7 +52,6 @@ class Merchant < ApplicationRecord
     end
   end
 
-
   def normalize_reference
     self.reference = reference&.downcase&.gsub(/[' ]/, "'" => "_", " " => "_", "-" => "_")
   end

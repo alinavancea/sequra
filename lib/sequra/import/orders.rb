@@ -8,7 +8,7 @@ module Sequra
         @file_path = file_path
         @merchants = Merchant.all
       end
-
+      # col_sep could be a parameter here
       def import
         CSV.foreach(@file_path, headers: true, col_sep: ";") do |row|
           create_order(row)

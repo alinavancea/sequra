@@ -32,6 +32,7 @@ module Sequra
 
             disbursement
           rescue => error
+            # We could adjust status here to failed
             Rails.logger.error(error.message)
           end
         else

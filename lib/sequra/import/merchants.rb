@@ -5,6 +5,7 @@ module Sequra
         @file_path = file_path
       end
 
+      # col_sep could be a parameter here
       def import
         CSV.foreach(@file_path, headers: true, col_sep: ";") do |row|
           create_merchant(row)
