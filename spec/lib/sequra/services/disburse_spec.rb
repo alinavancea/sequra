@@ -19,14 +19,14 @@ RSpec.describe Sequra::Services::Disburse do
       m2_disbursement = m2_pending_order.reload.disbursement
 
       expect(m1_disbursement.merchant_amount).to eq(99.05)
-      expect(m1_disbursement.sequora_commission_fee).to eq(0.0095)
-      expect(m1_disbursement.sequora_commission).to eq(0.95)
+      expect(m1_disbursement.sequra_commission_fee).to eq(0.0095)
+      expect(m1_disbursement.sequra_commission).to eq(0.95)
       expect(m1_disbursement.total_amount).to eq(100)
       expect(m1_disbursement).to be_paid
 
       expect(m2_disbursement.merchant_amount).to eq(8.91)
-      expect(m2_disbursement.sequora_commission_fee).to eq(0.01)
-      expect(m2_disbursement.sequora_commission).to eq(0.09)
+      expect(m2_disbursement.sequra_commission_fee).to eq(0.01)
+      expect(m2_disbursement.sequra_commission).to eq(0.09)
       expect(m2_disbursement.total_amount).to eq(9)
       expect(m2_disbursement).to be_paid
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_23_105718) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_24_074111) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,8 +19,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_23_105718) do
     t.decimal "merchant_amount", precision: 12, scale: 2, default: "0.0"
     t.uuid "merchant_id", null: false
     t.string "reference"
-    t.decimal "sequora_commission", precision: 12, scale: 2, default: "0.0"
-    t.decimal "sequora_commission_fee", precision: 10, scale: 4, default: "0.0"
+    t.decimal "sequra_commission", precision: 12, scale: 2, default: "0.0"
+    t.decimal "sequra_commission_fee", precision: 10, scale: 4, default: "0.0"
     t.integer "status", default: 0, null: false
     t.decimal "total_amount", precision: 10, scale: 2, default: "0.0"
     t.datetime "updated_at", null: false

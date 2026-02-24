@@ -12,16 +12,16 @@ module Sequra
           if pending_orders.any?
             total_amount = pending_orders.sum(:amount)
 
-            sequora_commission_fee = Sequra::FeeCalculator.for_amount(total_amount)
-            sequora_commission = Sequra::FeeCalculator.comssion_for_amount(total_amount)
+            sequra_commission_fee = Sequra::FeeCalculator.for_amount(total_amount)
+            sequra_commission = Sequra::FeeCalculator.comssion_for_amount(total_amount)
             merchant_ammount_after_fee = Sequra::FeeCalculator.merchant_amount_after_fee(total_amount)
 
             begin
               disbursement = Disbursement.create!(
                 merchant_id: merchant.id,
                 total_amount: total_amount,
-                sequora_commission_fee: sequora_commission_fee,
-                sequora_commission: sequora_commission,
+                sequra_commission_fee: sequra_commission_fee,
+                sequra_commission: sequra_commission,
                 merchant_amount: merchant_ammount_after_fee,
                 status: :paid
                 )
