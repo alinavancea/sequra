@@ -5,7 +5,7 @@ module Sequra
         merchants = Merchant.all
 
         merchants.each do |merchant|
-          sequra_commission = merchant.disbursements.paid.for_month(time_interval).sum(:sequra_commission)
+          sequra_commission = merchant.disbursements.paid.for_interval(time_interval).sum(:sequra_commission)
           if sequra_commission < merchant.minimum_monthly_fee
             commission_to_pay = merchant.minimum_monthly_fee - sequra_commission
 

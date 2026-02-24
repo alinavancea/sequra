@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_24_104309) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_24_134012) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -41,6 +41,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_24_104309) do
     t.datetime "created_at", null: false
     t.integer "disbursement_frequency", default: 0, null: false
     t.string "email", null: false
+    t.date "last_disbursed_date", default: -> { "CURRENT_TIMESTAMP" }
     t.date "live_on", null: false
     t.decimal "minimum_monthly_fee", precision: 10, scale: 2, default: "0.0"
     t.string "reference", null: false

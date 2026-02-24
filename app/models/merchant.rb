@@ -15,6 +15,32 @@ class Merchant < ApplicationRecord
   has_many :disbursements
   has_many :merchant_minimum_monthly_commissions
 
+  def should_disburse?
+    # has any pending orders
+    # has no disbursements
+    # weekly and today is the weekday from live_on
+    today = Time.now.utc
+    wday_for_today = today.wday
+
+    if self.weekly?
+      time_interval = today.last_week.beginning_of_day .. today.end_of_day
+
+      wday_for_today == live_on_weekday && orders.pending.any? && paid_disbursements_for(time_interval).empty?
+    else
+      time_interval = today.beginning_of_day .. today.end_of_day
+
+      orders.pending.any? && paid_disbursements_for(time_interval).empty?
+    end
+  end
+
+  def live_on_weekday
+    live_on.wday
+  end
+
+  def paid_disbursements_for(interval)
+    disbursements.paid.for_interval
+  end
+
   private
 
   def normalize_reference

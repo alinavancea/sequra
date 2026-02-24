@@ -12,11 +12,4 @@ namespace :orders do
       raise "Needs file_path"
     end
   end
-
-  task :disburse, [ :disbursement_frequence ] => [ :environment ] do |t, args|
-    frequence = args[:disbursement_frequence]
-
-    raise "Invalid frequence, should be daily or weekly" unless frequence.in?([ "daily", "weekly" ])
-    Sequra::Services::Disburse.new(frequence).run
-  end
 end
