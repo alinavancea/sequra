@@ -50,17 +50,17 @@ rake reports:merchant_minimum_monthly_fees
 
 ## An explanation of your technical choices, trade-offs, and assumptions.
 
-* Merchant has `last_disbursed_date` field to store a last time when was processed. Might be usefful for desiding if a specific merchant needs processing to disburse orders.
+* Merchant has `last_disbursed_date` field to store a last time when was processed. Might be useful for deciding if a specific merchant needs processing to disburse orders.
 
-* in case of `orders` I chosse to store external_id, and get a separate unique id, this will help in case of a failure at import to retry it and not duplicate orders. I also keep the `created_at` in a `order_date` filed, I don't see the clear purpose from the assesment but I think in general is better to keep all data arriving. Might be in future a need to report on this date, as an order created date.
+* in case of `orders` I chosse to store external_id, and get a separate unique id, this will help in case of a failure at import to retry it and not duplicate orders. I also keep the `created_at` in a `order_date` field, I don't see the clear purpose from the assesment but I think in general is better to keep all data arriving. Might be in future a need to report on this date, as an order created date.
 
-* In disbursement I choose to store the complete data related fees and comission. I think would be better for history purposes and also if at some point it is decided to change any fees. This will not affect unprocessed data.
+* In disbursement I choose to store the complete data related fees and comissions. I think would be better for history purposes and also if at some point it is decided to change any fees. This will not affect unprocessed data at a given time.
 
-* Disbursement is done per merchant. Fr each merchant, if eligible, we enque a separte job, this helps with load, would allow paralel processing. It returns disbursement object created.
+* Disbursement is done per merchant. For each merchant, if eligible, we enque a separte job, this helps with load, would allow paralel processing. It returns disbursement object created.
 
 * There is a separate `Sequra::FeeCalculator` as well, for isolated logic and ease of testing and usage.
 
-* The data related with mimimum_monthly_fee is stored in `merchant_minimum_monthly_commission`, I think this will help with reporting and processing correct raimin amount for merchants.  The logic is under `Sequra::Services::MinimumMonthlyFees`  could use some refactoring, maybe should be done per merchant intead of all at once.
+* The data related with `mimimum_monthly_fee` is stored in `merchant_minimum_monthly_commission`, I think this will help with reporting and processing correct raimin amount for merchants.  The logic is under `Sequra::Services::MinimumMonthlyFees`  could use some refactoring, maybe should be done per merchant intead of all at once.
 
 * I moved most of the bussines logic under `lib/sequra` this way can be easly isolated and tested
 
