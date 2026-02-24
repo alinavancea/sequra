@@ -1,12 +1,19 @@
 module Sequra
   module Services
     class Disburse
-      def self.run
+      def initialize(frequency)
+        @frequency = frequency
+      end
+
+      def merchants_with_frequency
+        Merchant.where(disbursement_frequency: @frequency)
+      end
+
+      def run
         # TODO:
-        # Handle minimum_monthly_fee
         # Handle the frequency
         # Should we process the orders grouped by merchant and processed_at date? In that case we would have a processed at date to
-        Merchant.all.each do |merchant|
+        merchants_with_frequency.each do |merchant|
           pending_orders = merchant.orders.pending
 
           if pending_orders.any?
