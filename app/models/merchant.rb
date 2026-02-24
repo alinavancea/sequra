@@ -17,21 +17,7 @@ class Merchant < ApplicationRecord
 
   # TODO: test this
   def should_disburse?
-    # has any pending orders
-    # has no disbursements
-    # weekly and today is the weekday from live_on
-    today = Time.now.utc
-    wday_for_today = today.wday
-
-    if self.weekly?
-      time_interval = today.last_week.beginning_of_day .. today.end_of_day
-
-      wday_for_today == live_on_weekday && orders.pending.any? && paid_disbursements_for(time_interval).empty?
-    else
-      time_interval = today.beginning_of_day .. today.end_of_day
-
-      orders.pending.any? && paid_disbursements_for(time_interval).empty?
-    end
+    pending_orders? && !already_disbursed? && correct_frequency_day?
   end
 
   def live_on_weekday
@@ -43,6 +29,29 @@ class Merchant < ApplicationRecord
   end
 
   private
+
+  def pending_orders?
+    orders.pending.any?
+  end
+
+  def already_disbursed?
+    paid_disbursements_for(disbursement_time_interval).any?
+  end
+
+  def correct_frequency_day?
+    return true if daily?
+    Time.now.utc.wday == live_on_weekday
+  end
+
+  def disbursement_time_interval
+    today = Time.now.utc
+    if weekly?
+      today.last_week.beginning_of_day..today.end_of_day
+    else
+      today.beginning_of_day..today.end_of_day
+    end
+  end
+
 
   def normalize_reference
     self.reference = reference&.downcase&.gsub(/[' ]/, "'" => "_", " " => "_", "-" => "_")
