@@ -94,6 +94,7 @@ This is the link to conversation https://claude.ai/share/226f96bc-2f29-4290-94a3
 - refactor
 - I tried using it for generating mermaid flow diagrams, https://claude.ai/share/a9db0111-b80c-4847-9f71-4eb913527800 wich I added here implementation_plan.md
 - I would have liked to continue using it for more refactoring and improvements, as well for the orders import
+- I used it for some git related questions and setup on gihub, I wanted to have tests working there to, this was my first time doing it and now it works https://claude.ai/share/1033e05b-50b4-4208-8ad3-ab2dea1fa209
 
 
 
