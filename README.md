@@ -70,8 +70,6 @@ One on `disbursements` and one on `merchant_minimum_monthly_commission`
 
 This could have been probably done in one go, but first should be checked the performance on both aproaches
 
-
-
 ## Areas you would improve given more time.
 
 * Import of orders, current logic is slow, would need some time, maybe could be improve by loading csv file directly in orders table. This can be done also in later stages.
@@ -86,6 +84,17 @@ failure
 * There should be more tests in some areas
 
 ## How you used AI tools, if applicable. We’d love to understand how you integrated it into your process
+
+I used AI since I started the challange for
+
+This is the link to conversation https://claude.ai/share/226f96bc-2f29-4290-94a3-ca9419df43ba
+
+- seting up the environment
+- name suggestions for classes
+- refactor
+- I tried using it for generating mermaid flow diagrams, https://claude.ai/share/a9db0111-b80c-4847-9f71-4eb913527800 wich I added here implementation_plan.md
+- I would have liked to continue using it for more refactoring and improvements, as well for the orders import
+
 
 
 
