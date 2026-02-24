@@ -18,7 +18,7 @@ RSpec.describe Disbursement, type: :model do
     let(:orders) { Order.create(merchant: merchant, external_id: "516c2b28eceb", amount: 100) }
 
     it "sets the reference" do
-      disrembursment = Disbursement.create!(merchant: merchant)
+      disrembursment = Disbursement.create(merchant: merchant)
 
       expect(disrembursment.reference).to eq("#{disrembursment.created_at.to_date}_#{disrembursment.merchant.id}")
     end

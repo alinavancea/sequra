@@ -11,6 +11,6 @@ class Disbursement < ApplicationRecord
   private
 
   def set_reference
-    self.reference = "#{Date.current}_#{merchant_id}"
+    self.reference = "#{Date.current}_#{merchant_id}" unless reference.present?
   end
 end
