@@ -26,4 +26,13 @@ namespace :disbursement do
 
     Sequra::Services::MinimumMonthlyFees.new.calculate(last_month_interval)
   end
+
+  task merchant_minimum_monthly_fee_report: :environment do
+    desc "Yearly report for disrembursments by created_at date"
+    yearly_report = Sequra::Reports::MimimumMonthlyFeesReport.new.generate
+
+    yearly_report.each do |row|
+      p [ row.year, row.monthly_fees_count, row.minimum_monthly_comission.to_f ]
+    end
+  end
 end
