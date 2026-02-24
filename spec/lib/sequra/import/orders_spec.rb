@@ -5,8 +5,8 @@ RSpec.describe Sequra::Import::Orders do
     let(:file_path) { "orders.csv" }
 
     it "imports orders" do
-      Merchant.create!(reference: "padberg_group", live_on: "2022-01-01", email: "info@padberg-group.com")
-      Merchant.create!(reference: "bins_inc", live_on: "2022-01-01", email: "info@bins.com")
+      Merchant.create(reference: "padberg_group", live_on: "2022-01-01", email: "info@padberg-group.com")
+      Merchant.create(reference: "bins_inc", live_on: "2022-01-01", email: "info@bins.com")
 
       Sequra::Import::Orders.new(file_fixture(file_path)).import
 
