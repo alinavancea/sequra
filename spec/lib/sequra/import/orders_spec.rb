@@ -35,6 +35,12 @@ RSpec.describe Sequra::Import::Orders do
 
       expect(Order.count).to eq(4)
     end
+
+    it "returns empty errors on success" do
+      errors = importer.import
+
+      expect(errors).to be_empty
+    end
   end
 
   context "with invalid data" do
@@ -56,6 +62,12 @@ RSpec.describe Sequra::Import::Orders do
       importer.import
 
       expect(Order.where(amount: 433.21).count).to eq(0)
+    end
+
+    it "returns errors for invalid rows" do
+      errors = importer.import
+
+      expect(errors.length).to eq(2)
     end
   end
 end

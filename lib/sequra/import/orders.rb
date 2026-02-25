@@ -7,9 +7,16 @@ module Sequra
       end
 
       def import
+        errors = []
+
         CSV.foreach(@file_path, headers: true, col_sep: ";") do |row|
           create_order(row)
+        rescue => error
+          errors << { external_id: row["id"], error: error.message }
+          Rails.logger.error(error.message)
         end
+
+        errors
       end
 
       private
@@ -26,8 +33,6 @@ module Sequra
           order.order_date = row["created_at"]
           order.merchant = merchant
         end
-      rescue => error
-        Rails.logger.error(error.message)
       end
     end
   end
