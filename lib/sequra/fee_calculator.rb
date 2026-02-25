@@ -1,20 +1,15 @@
 module Sequra
   class FeeCalculator
-    # TODO:
-    # Use a constant
+    COMMISSION_FEES = [
+      { range: (0...50), rate: 0.01 },
+      { range: (50...300), rate: 0.0095 },
+      { range: (300...), rate: 0.0085 }
+    ].freeze
+
     def self.for_amount(amount)
       return 0 if amount.nil? || amount == 0
 
-      case amount
-      when (0...50)
-        0.01
-      when (50...300)
-        0.0095
-      when (300...)
-        0.0085
-      else
-        0
-      end
+      COMMISSION_FEES.find { |fee| fee[:range].cover?(amount) }&.dig(:rate) || 0
     end
 
     def self.commission_for_amount(amount)
