@@ -20,7 +20,7 @@ RSpec.describe Merchant, type: :model do
       expect(merchant.weekly?).to be true
     end
 
-    it "fails when using a differnt value" do
+    it "fails when using a different value" do
       expect {
         create(:merchant, disbursement_frequency: "Other")
       }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Disbursement frequency is not included in the list")

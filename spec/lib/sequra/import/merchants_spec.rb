@@ -11,7 +11,7 @@ RSpec.describe Sequra::Import::Merchants do
     end
   end
 
-  context "with ivalid data" do
+  context "with invalid data" do
     let(:file_path) { "invalid_merchants.csv" }
 
     it "imports merchants" do

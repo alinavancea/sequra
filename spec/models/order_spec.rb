@@ -18,7 +18,7 @@ RSpec.describe Order, type: :model do
       expect(order.processed?).to be true
     end
 
-    it "fails when using a differnt value" do
+    it "fails when using a different value" do
       expect {
         create(:order, status: :other)
       }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Status is not included in the list")

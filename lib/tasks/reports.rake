@@ -1,6 +1,6 @@
 namespace :reports do
   task yearly: :environment do
-    desc "Yearly report for disrembursments by created_at date"
+    desc "Yearly report for disbursements by created_at date"
     yearly_report = Sequra::Reports::YearlyReport.new.generate
 
     yearly_report.each do |row|
@@ -9,7 +9,7 @@ namespace :reports do
   end
 
   task disbursements: :environment do
-    desc "Yearly report for disrembursments by created_at date"
+    desc "Yearly report for disbursements by created_at date"
     yearly_report = Sequra::Reports::DisbursementReport.new.generate_by_created_at
 
     p [ "year", "disbursements_count", "sequra_commission", "merchant_amount" ]
