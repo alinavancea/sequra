@@ -17,7 +17,7 @@ module Sequra
       end
     end
 
-    def self.comssion_for_amount(amount)
+    def self.commission_for_amount(amount)
       return 0 if amount.nil? || amount <= 0
 
       (amount * for_amount(amount)).round(2)

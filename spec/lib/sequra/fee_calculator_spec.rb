@@ -14,12 +14,12 @@ RSpec.describe Sequra::FeeCalculator do
     end
 
     it "calculates correct comission" do
-      expect(Sequra::FeeCalculator.comssion_for_amount(10)).to eq(0.1)
-      expect(Sequra::FeeCalculator.comssion_for_amount(100)).to eq(0.95)
-      expect(Sequra::FeeCalculator.comssion_for_amount(1000)).to eq(8.5)
+      expect(Sequra::FeeCalculator.commission_for_amount(10)).to eq(0.1)
+      expect(Sequra::FeeCalculator.commission_for_amount(100)).to eq(0.95)
+      expect(Sequra::FeeCalculator.commission_for_amount(1000)).to eq(8.5)
 
-      expect(Sequra::FeeCalculator.comssion_for_amount(0)).to eq(0)
-      expect(Sequra::FeeCalculator.comssion_for_amount(-1)).to eq(0)
+      expect(Sequra::FeeCalculator.commission_for_amount(0)).to eq(0)
+      expect(Sequra::FeeCalculator.commission_for_amount(-1)).to eq(0)
     end
 
     it "calculates correct merchant amount after fee" do
