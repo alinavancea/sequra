@@ -1,3 +1,10 @@
+## Code Review by Claude Code
+
+A full code review was performed using [Claude Code](https://claude.ai/claude-code), identifying and fixing 21 issues across bugs, typos, missing tests, and improvements — all in ~1h40m.
+
+- [CODE_REVIEW.md](CODE_REVIEW.md) — All 21 issues with descriptions and commit links
+- [PROMPTS.md](PROMPTS.md) — Every prompt used during the review session
+
 ## Setup
 
 * Ruby version ruby 3.3.6 

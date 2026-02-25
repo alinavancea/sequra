@@ -5,11 +5,17 @@ module Sequra
         @file_path = file_path
       end
 
-      # col_sep could be a parameter here
       def import
+        errors = []
+
         CSV.foreach(@file_path, headers: true, col_sep: ";") do |row|
           create_merchant(row)
+        rescue => error
+          errors << { reference: row["reference"], error: error.message }
+          Rails.logger.error(error.message)
         end
+
+        errors
       end
 
       private
@@ -22,8 +28,6 @@ module Sequra
           merchant.disbursement_frequency = row["disbursement_frequency"]
           merchant.minimum_monthly_fee = row["minimum_monthly_fee"].to_f
         end
-      rescue => error
-        Rails.logger.error(error.message)
       end
     end
   end

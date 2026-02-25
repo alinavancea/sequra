@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_24_134012) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_25_090555) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -25,13 +25,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_24_134012) do
     t.decimal "total_amount", precision: 10, scale: 2, default: "0.0"
     t.datetime "updated_at", null: false
     t.index ["merchant_id"], name: "index_disbursements_on_merchant_id"
+    t.index ["reference"], name: "index_disbursements_on_reference", unique: true
   end
 
   create_table "merchant_minimum_monthly_commissions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.date "commission_date", null: false
     t.datetime "created_at", null: false
     t.uuid "merchant_id", null: false
-    t.decimal "minimum_monthly_comission", precision: 10, scale: 2, default: "0.0"
+    t.decimal "minimum_monthly_commission", precision: 10, scale: 2, default: "0.0"
     t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["merchant_id"], name: "index_merchant_minimum_monthly_commissions_on_merchant_id"
@@ -46,6 +47,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_24_134012) do
     t.decimal "minimum_monthly_fee", precision: 10, scale: 2, default: "0.0"
     t.string "reference", null: false
     t.datetime "updated_at", null: false
+    t.index ["reference"], name: "index_merchants_on_reference", unique: true
   end
 
   create_table "orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -58,6 +60,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_24_134012) do
     t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["disbursement_id"], name: "index_orders_on_disbursement_id"
+    t.index ["external_id"], name: "index_orders_on_external_id", unique: true
     t.index ["merchant_id"], name: "index_orders_on_merchant_id"
   end
 

@@ -1,21 +1,22 @@
 module Sequra
   module Services
     class MinimumMonthlyFees
-      # This method could use some care, should be split maybe per merchant
       def calculate(time_interval)
-        merchants = Merchant.all
+        errors = []
 
-        merchants.each do |merchant|
+        Merchant.find_each do |merchant|
           sequra_commission = merchant.disbursements.paid.for_interval(time_interval).sum(:sequra_commission)
           if sequra_commission < merchant.minimum_monthly_fee
             commission_to_pay = merchant.minimum_monthly_fee - sequra_commission
 
-            merchant.merchant_minimum_monthly_commissions.create!(minimum_monthly_comission: commission_to_pay, commission_date: time_interval.first)
+            merchant.merchant_minimum_monthly_commissions.create!(minimum_monthly_commission: commission_to_pay, commission_date: time_interval.first)
           end
         rescue => error
-          # We could adjust status here to failed
+          errors << { merchant_id: merchant.id, error: error.message }
           Rails.logger.error(error.message)
         end
+
+        errors
       end
     end
   end
