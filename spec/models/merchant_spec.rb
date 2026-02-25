@@ -63,6 +63,60 @@ RSpec.describe Merchant, type: :model do
     end
   end
 
+  describe "#should_disburse?" do
+    context "daily merchant" do
+      let(:merchant) { create(:merchant) }
+
+      it "returns true with pending orders and no disbursement today" do
+        create(:order, merchant: merchant, status: :pending)
+
+        expect(merchant.should_disburse?).to be true
+      end
+
+      it "returns false with no pending orders" do
+        expect(merchant.should_disburse?).to be false
+      end
+
+      it "returns false when already disbursed today" do
+        create(:order, merchant: merchant, status: :pending)
+        create(:disbursement, merchant: merchant, status: :paid, created_at: Time.now.utc)
+
+        expect(merchant.should_disburse?).to be false
+      end
+    end
+
+    context "weekly merchant" do
+      # live_on is a Wednesday (2022-01-05)
+      let(:merchant) { create(:merchant, :weekly, live_on: "2022-01-05") }
+
+      before do
+        create(:order, merchant: merchant, status: :pending)
+      end
+
+      it "returns true on the correct weekday with pending orders" do
+        # Travel to a Wednesday
+        travel_to Time.utc(2026, 2, 25) do
+          expect(merchant.should_disburse?).to be true
+        end
+      end
+
+      it "returns false on the wrong weekday" do
+        # Travel to a Thursday
+        travel_to Time.utc(2026, 2, 26) do
+          expect(merchant.should_disburse?).to be false
+        end
+      end
+
+      it "returns false when already disbursed this week" do
+        travel_to Time.utc(2026, 2, 25) do
+          create(:disbursement, merchant: merchant, status: :paid, created_at: Time.utc(2026, 2, 23))
+
+          expect(merchant.should_disburse?).to be false
+        end
+      end
+    end
+  end
+
   describe "reference" do
     describe "normalize" do
       context "when having a value" do

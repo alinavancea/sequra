@@ -15,7 +15,6 @@ class Merchant < ApplicationRecord
   has_many :disbursements
   has_many :merchant_minimum_monthly_commissions
 
-  # TODO: Add test for this, method refactored with claude
   def should_disburse?
     pending_orders? && !already_disbursed? && correct_frequency_day?
   end
