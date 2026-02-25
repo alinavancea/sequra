@@ -2,20 +2,20 @@ require 'rails_helper'
 
 RSpec.describe Sequra::Services::Disburse do
   describe "run" do
-    let(:merchant1) { Merchant.create(reference: "padberg_group", live_on: "2022-01-01", email: "info@padberg-group.com", disbursement_frequency: :daily) }
-    let(:merchant2) { Merchant.create(reference: "bins_inc", live_on: "2022-01-01", email: "info@bins.com", disbursement_frequency: :daily) }
-    let(:merchant3) { Merchant.create(reference: "weeekly_bins_inc", live_on: "2022-01-01", email: "info@bins.com", disbursement_frequency: :weekly) }
+    let(:merchant1) { create(:merchant, reference: "padberg_group", email: "info@padberg-group.com") }
+    let(:merchant2) { create(:merchant, reference: "bins_inc", email: "info@bins.com") }
+    let(:merchant3) { create(:merchant, :weekly, reference: "weekly_bins_inc", email: "info@wbins.com") }
 
     let(:service1) { Sequra::Services::Disburse.new(merchant1) }
     let(:service2) { Sequra::Services::Disburse.new(merchant2) }
     let(:service3) { Sequra::Services::Disburse.new(merchant3) }
 
     before do
-      Order.create(merchant: merchant1, external_id: "516c2b28eceb1", amount: 100, status: :pending)
-      Order.create(merchant: merchant1, external_id: "516c2b28eceb2", amount: 10, status: :processed)
-      Order.create(merchant: merchant2, external_id: "516c2b28eceb3", amount: 9, status: :pending)
-      Order.create(merchant: merchant2, external_id: "516c2b28eceb4", amount: 91, status: :unprocessable)
-      Order.create(merchant: merchant3, external_id: "516c2b28eceb4", amount: 91, status: :pending)
+      create(:order, merchant: merchant1, amount: 100, status: :pending)
+      create(:order, merchant: merchant1, amount: 10, status: :processed)
+      create(:order, merchant: merchant2, amount: 9, status: :pending)
+      create(:order, merchant: merchant2, amount: 91, status: :unprocessable)
+      create(:order, merchant: merchant3, amount: 91, status: :pending)
     end
 
     describe "pending orders" do

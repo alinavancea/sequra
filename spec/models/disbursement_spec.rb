@@ -8,19 +8,10 @@ RSpec.describe Disbursement, type: :model do
   end
 
   describe "set_reference" do
-    let(:merchant) {
-      Merchant.create(reference: 'REF001',
-        email: 'test@example.com',
-        minimum_monthly_fee: 10.0,
-        live_on: "2026-02-01")
-    }
+    it "sets the reference automatically" do
+      disbursement = create(:disbursement, reference: nil)
 
-    let(:orders) { Order.create(merchant: merchant, external_id: "516c2b28eceb", amount: 100) }
-
-    it "sets the reference" do
-      disrembursment = Disbursement.create(merchant: merchant)
-
-      expect(disrembursment.reference).to eq("#{disrembursment.created_at.to_date}_#{disrembursment.merchant.id}")
+      expect(disbursement.reference).to eq("#{disbursement.created_at.to_date}_#{disbursement.merchant.id}")
     end
   end
 end

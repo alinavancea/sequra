@@ -1,36 +1,35 @@
 require 'rails_helper'
 
 RSpec.describe Sequra::Reports::MinimumMonthlyFeesReport do
-  let(:merchant1) { Merchant.create(reference: "merchant1", email: "merchant1@test.com", live_on: "2022-01-01") }
-  let(:merchant2) { Merchant.create(reference: "merchant2", email: "merchant2@test.com", live_on: "2022-01-01") }
+  let(:merchant1) { create(:merchant) }
+  let(:merchant2) { create(:merchant) }
 
   let(:report) { Sequra::Reports::MinimumMonthlyFeesReport.new.generate }
 
   before do
-    MerchantMinimumMonthlyCommission.create(
+    create(:merchant_minimum_monthly_commission,
       created_at: Date.parse("2026-01-01"),
       commission_date: Date.parse("2026-01-01"),
       merchant: merchant1,
-      minimum_monthly_comission: 10
-      )
-    MerchantMinimumMonthlyCommission.create(
+      minimum_monthly_comission: 10)
+
+    create(:merchant_minimum_monthly_commission,
       created_at: Date.parse("2026-02-01"),
       commission_date: Date.parse("2026-02-01"),
       merchant: merchant1,
-      minimum_monthly_comission: 9,
-      )
-    MerchantMinimumMonthlyCommission.create(
+      minimum_monthly_comission: 9)
+
+    create(:merchant_minimum_monthly_commission,
       created_at: Date.parse("2025-02-01"),
       commission_date: Date.parse("2025-02-01"),
       merchant: merchant1,
-      minimum_monthly_comission: 5,
-      )
-    MerchantMinimumMonthlyCommission.create(
+      minimum_monthly_comission: 5)
+
+    create(:merchant_minimum_monthly_commission,
       created_at: Date.parse("2025-02-01"),
       commission_date: Date.parse("2025-02-01"),
       merchant: merchant2,
-      minimum_monthly_comission: 5,
-      )
+      minimum_monthly_comission: 5)
   end
 
   describe "generates the report" do

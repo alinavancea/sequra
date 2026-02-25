@@ -25,7 +25,7 @@ class Merchant < ApplicationRecord
   end
 
   def paid_disbursements_for(interval)
-    disbursements.paid.for_interval
+    disbursements.paid.for_interval(interval)
   end
 
   private
