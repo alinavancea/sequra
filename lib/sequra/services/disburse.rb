@@ -5,10 +5,6 @@ module Sequra
         @merchant = merchant
       end
 
-      def pending_orders
-        @pending_orders ||= @merchant.orders.pending
-      end
-
       def run
         return unless pending_orders.any?
 
@@ -37,6 +33,12 @@ module Sequra
         pending_orders.update_all(status: :failed)
         Rails.logger.error(error.message)
         nil
+      end
+
+      private
+
+      def pending_orders
+        @pending_orders ||= @merchant.orders.pending
       end
     end
   end
