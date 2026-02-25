@@ -22,7 +22,7 @@ module Sequra
             sequra_commission:   d&.sequra_commission.to_f,
             merchant_amount:     d&.merchant_amount.to_f,
             monthly_fees_count:  m&.monthly_fees_count,
-            minimum_monthly_fee: m&.minimum_monthly_comission.to_f
+            minimum_monthly_fee: m&.minimum_monthly_commission.to_f
           }
         end
       end

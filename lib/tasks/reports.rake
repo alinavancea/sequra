@@ -22,9 +22,9 @@ namespace :reports do
     desc "Yearly report for mimum monthly fees"
     yearly_report = Sequra::Reports::MinimumMonthlyFeesReport.new.generate
 
-    p [ "year", "monthly_fees_count", "minimum_monthly_comission" ]
+    p [ "year", "monthly_fees_count", "minimum_monthly_commission" ]
     yearly_report.each do |row|
-      p [ row.year, row.monthly_fees_count, row.minimum_monthly_comission.to_f ]
+      p [ row.year, row.monthly_fees_count, row.minimum_monthly_commission.to_f ]
     end
   end
 end

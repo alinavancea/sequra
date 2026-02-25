@@ -7,7 +7,7 @@ module Sequra
           if sequra_commission < merchant.minimum_monthly_fee
             commission_to_pay = merchant.minimum_monthly_fee - sequra_commission
 
-            merchant.merchant_minimum_monthly_commissions.create!(minimum_monthly_comission: commission_to_pay, commission_date: time_interval.first)
+            merchant.merchant_minimum_monthly_commissions.create!(minimum_monthly_commission: commission_to_pay, commission_date: time_interval.first)
           end
         rescue => error
           # We could adjust status here to failed

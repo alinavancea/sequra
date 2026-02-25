@@ -49,7 +49,7 @@ RSpec.describe Sequra::Services::MinimumMonthlyFees do
       commission = MerchantMinimumMonthlyCommission.last
 
       expect(commission.merchant_id).to eq(merchant2.id)
-      expect(commission.minimum_monthly_comission.to_f).to eq(10 - 0.95)
+      expect(commission.minimum_monthly_commission.to_f).to eq(10 - 0.95)
     end
   end
 end
