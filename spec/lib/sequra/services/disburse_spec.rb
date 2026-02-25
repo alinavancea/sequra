@@ -1,42 +1,84 @@
 require 'rails_helper'
 
 RSpec.describe Sequra::Services::Disburse do
-  describe "run" do
-    let(:merchant1) { create(:merchant, reference: "padberg_group", email: "info@padberg-group.com") }
-    let(:merchant2) { create(:merchant, reference: "bins_inc", email: "info@bins.com") }
-    let(:merchant3) { create(:merchant, :weekly, reference: "weekly_bins_inc", email: "info@wbins.com") }
+  describe "#run" do
+    let(:merchant) { create(:merchant) }
+    let(:service) { Sequra::Services::Disburse.new(merchant) }
 
-    let(:service1) { Sequra::Services::Disburse.new(merchant1) }
-    let(:service2) { Sequra::Services::Disburse.new(merchant2) }
-    let(:service3) { Sequra::Services::Disburse.new(merchant3) }
+    context "with pending orders" do
+      before do
+        create(:order, merchant: merchant, amount: 100, status: :pending)
+        create(:order, merchant: merchant, amount: 10, status: :processed)
+      end
 
-    before do
-      create(:order, merchant: merchant1, amount: 100, status: :pending)
-      create(:order, merchant: merchant1, amount: 10, status: :processed)
-      create(:order, merchant: merchant2, amount: 9, status: :pending)
-      create(:order, merchant: merchant2, amount: 91, status: :unprocessable)
-      create(:order, merchant: merchant3, amount: 91, status: :pending)
-    end
+      it "creates a paid disbursement with correct amounts" do
+        disbursement = service.run
 
-    describe "pending orders" do
-      it "has pending orders" do
-        expect(service1.pending_orders.count).to eq(1)
-        expect(service2.pending_orders.count).to eq(1)
-        expect(service3.pending_orders.count).to eq(1)
+        expect(disbursement).to be_paid
+        expect(disbursement.total_amount).to eq(100)
+        expect(disbursement.sequra_commission_fee).to eq(0.0095)
+        expect(disbursement.sequra_commission).to eq(0.95)
+        expect(disbursement.merchant_amount).to eq(99.05)
+      end
+
+      it "marks pending orders as processed" do
+        service.run
+
+        expect(merchant.orders.processed.count).to eq(2)
+        expect(merchant.orders.pending.count).to eq(0)
+      end
+
+      it "updates merchant last_disbursed_date" do
+        service.run
+
+        expect(merchant.reload.last_disbursed_date).to eq(Time.now.utc.to_date)
+      end
+
+      it "assigns the disbursement to the orders" do
+        disbursement = service.run
+
+        expect(merchant.orders.pending.count).to eq(0)
+        expect(disbursement.orders.count).to eq(1)
       end
     end
 
-    describe "disburse" do
-      it "works" do
-        disbursement = service1.run
+    context "with no pending orders" do
+      before do
+        create(:order, merchant: merchant, amount: 100, status: :processed)
+      end
 
-        expect(Disbursement.count).to eq(1)
+      it "returns nil" do
+        expect(service.run).to be_nil
+      end
 
-        expect(disbursement.merchant_amount).to eq(99.05)
-        expect(disbursement.sequra_commission_fee).to eq(0.0095)
-        expect(disbursement.sequra_commission).to eq(0.95)
-        expect(disbursement.total_amount).to eq(100)
-        expect(disbursement).to be_paid
+      it "does not create a disbursement" do
+        service.run
+
+        expect(Disbursement.count).to eq(0)
+      end
+    end
+
+    context "when an error occurs during the transaction" do
+      before do
+        create(:order, merchant: merchant, amount: 100, status: :pending)
+        allow_any_instance_of(Merchant).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+      end
+
+      it "rolls back the disbursement" do
+        service.run
+
+        expect(Disbursement.count).to eq(0)
+      end
+
+      it "marks pending orders as failed" do
+        service.run
+
+        expect(merchant.orders.failed.count).to eq(1)
+        expect(merchant.orders.pending.count).to eq(0)
+      end
+
+      it "returns nil" do
+        expect(service.run).to be_nil
       end
     end
   end
