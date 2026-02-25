@@ -29,7 +29,27 @@ RSpec.describe Order, type: :model do
     it "fails with no merchant assigned" do
       expect {
         Order.create!(status: :pending, external_id: "516c2b28eceb")
-      }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Merchant must exist")
+      }.to raise_error(ActiveRecord::RecordInvalid, /Merchant must exist/)
+    end
+  end
+
+  describe "amount" do
+    it "fails when amount is nil" do
+      expect {
+        create(:order, amount: nil)
+      }.to raise_error(ActiveRecord::RecordInvalid, /Amount can't be blank/)
+    end
+
+    it "fails when amount is zero" do
+      expect {
+        create(:order, amount: 0)
+      }.to raise_error(ActiveRecord::RecordInvalid, /Amount must be greater than 0/)
+    end
+
+    it "fails when amount is negative" do
+      expect {
+        create(:order, amount: -10)
+      }.to raise_error(ActiveRecord::RecordInvalid, /Amount must be greater than 0/)
     end
   end
 
