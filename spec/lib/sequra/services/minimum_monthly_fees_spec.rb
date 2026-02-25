@@ -41,8 +41,10 @@ RSpec.describe Sequra::Services::MinimumMonthlyFees do
   end
 
   describe "calculate" do
-    it "creates merchant_minimum_monthly_commissions for merchant1" do
-      service.calculate(Date.parse("2026-01-01")..Date.parse("2026-01-31"))
+    let(:interval) { Date.parse("2026-01-01")..Date.parse("2026-01-31") }
+
+    it "creates merchant_minimum_monthly_commissions for merchant2" do
+      service.calculate(interval)
 
       expect(MerchantMinimumMonthlyCommission.count).to eq(1)
 
@@ -50,6 +52,21 @@ RSpec.describe Sequra::Services::MinimumMonthlyFees do
 
       expect(commission.merchant_id).to eq(merchant2.id)
       expect(commission.minimum_monthly_commission.to_f).to eq(10 - 0.95)
+    end
+
+    it "returns empty errors on success" do
+      errors = service.calculate(interval)
+
+      expect(errors).to be_empty
+    end
+
+    it "returns errors and continues processing when a merchant fails" do
+      allow_any_instance_of(Merchant).to receive(:minimum_monthly_fee).and_raise(StandardError, "something went wrong")
+
+      errors = service.calculate(interval)
+
+      expect(errors.length).to eq(2)
+      expect(errors.first[:error]).to eq("something went wrong")
     end
   end
 end
