@@ -8,7 +8,6 @@ class Disbursement < ApplicationRecord
 
   before_validation :set_reference, on: [ :create ]
 
-  scope :for_month, ->(interval) { where(created_at: interval) }
   scope :for_interval, ->(interval) { where(created_at: interval) }
 
   private
