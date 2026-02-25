@@ -1,11 +1,9 @@
 class DisburseJob
   include Sidekiq::Job
 
-  def perform(merchant_id, enqueue_time)
+  def perform(merchant_id)
     merchant = Merchant.find(merchant_id)
 
-    service = Sequra::Services::Disburse.new(merchant)
-
-    service.run
+    Sequra::Services::Disburse.new(merchant).run
   end
 end
