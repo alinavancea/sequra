@@ -1,11 +1,8 @@
 module Sequra
   module Services
     class MinimumMonthlyFees
-      # This method could use some care, should be split maybe per merchant
       def calculate(time_interval)
-        merchants = Merchant.all
-
-        merchants.each do |merchant|
+        Merchant.find_each do |merchant|
           sequra_commission = merchant.disbursements.paid.for_interval(time_interval).sum(:sequra_commission)
           if sequra_commission < merchant.minimum_monthly_fee
             commission_to_pay = merchant.minimum_monthly_fee - sequra_commission
